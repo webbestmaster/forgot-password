@@ -1,26 +1,19 @@
 // @flow
 
-import {Home} from '../../page/home/c-home';
-import {Login} from '../../page/login/c-login';
-import {Register} from '../../page/register/c-register';
+import {PasswordReset} from '../../page/password-reset/c-password-reset';
 
 import type {RedirectItemType, RouteItemType} from './render-route-helper';
 import {routePathMap} from './routes-path-map';
 
 export const routeItemMap: {[key: string]: RouteItemType | RedirectItemType} = {
     home: {
-        path: routePathMap.home.path,
-        component: Home,
-        type: 'route',
+        from: routePathMap.home.path,
+        path: routePathMap.passwordReset.path,
+        type: 'redirect',
     },
-    login: {
-        path: routePathMap.login.path,
-        component: Login,
-        type: 'route',
-    },
-    register: {
-        path: routePathMap.register.path,
-        component: Register,
+    passwordReset: {
+        path: routePathMap.passwordReset.path,
+        component: PasswordReset,
         type: 'route',
     },
 };
