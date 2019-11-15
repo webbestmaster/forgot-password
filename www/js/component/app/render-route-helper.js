@@ -10,6 +10,8 @@ import {Link, Redirect, Route} from 'react-router-dom';
 import type {MatchType} from '../../type/react-router-dom-v5-type-extract';
 import {PageWrapper} from '../page-wrapper/c-page-wrapper';
 import pageWrapperStyle from '../page-wrapper/page-wrapper.style.scss';
+import type {LocaleContextType} from '../locale/c-locale-context';
+import {LocaleContextConsumer} from '../locale/c-locale-context';
 
 export type RouteItemType = {|
     +path: string,
@@ -63,9 +65,15 @@ export function redderRoute(routeItem: RouteItemType | RedirectItemType): Node {
                         timeout={300}
                         unmountOnExit
                     >
-                        <PageWrapper>
-                            <PageComponent/>
-                        </PageWrapper>
+                        <LocaleContextConsumer>
+                            {(localeContext: LocaleContextType): Node => {
+                                return (
+                                    <PageWrapper>
+                                        <PageComponent localeContext={localeContext}/>
+                                    </PageWrapper>
+                                );
+                            }}
+                        </LocaleContextConsumer>
                     </CSSTransition>
                 );
             }}
