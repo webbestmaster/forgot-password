@@ -9,7 +9,7 @@ import {routePathMap} from './routes-path-map';
 export const routeItemMap: {[key: string]: RouteItemType | RedirectItemType} = {
     home: {
         from: routePathMap.home.path,
-        path: routePathMap.passwordResetSuccess.path,
+        path: routePathMap.passwordReset.path,
         type: 'redirect',
     },
     passwordReset: {
