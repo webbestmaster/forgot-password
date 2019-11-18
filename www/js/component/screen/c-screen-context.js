@@ -43,7 +43,6 @@ export class ScreenProvider extends Component<PropsType, StateType> {
         const screenState = getScreenState();
 
         if (screenState.width !== width || screenState.height !== height) {
-            // eslint-disable-next-line react/no-set-state
             this.setState({providedData: screenState});
         }
     };
