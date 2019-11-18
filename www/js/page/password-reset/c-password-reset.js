@@ -1,6 +1,7 @@
 // @flow
 
 import React, {Component, type Node} from 'react';
+import classNames from 'classnames';
 
 import type {LocaleContextType} from '../../component/locale/c-locale-context';
 import {InputText} from '../../component/layout/input/input-text/c-input-text';
@@ -130,7 +131,14 @@ export class PasswordReset extends Component<PropsType, StateType> {
                 />
                 <ValidationHint validation={formValidation.passwordConfirm}/>
 
-                <button type="submit">submit {Number(this.getIsFormValid())}</button>
+                <button
+                    className={classNames(passwordResetStyle.password_reset__form__button, {
+                        [passwordResetStyle.password_reset__form__button__active]: this.getIsFormValid(),
+                    })}
+                    type="submit"
+                >
+                    Set Password
+                </button>
             </form>
         );
     }
