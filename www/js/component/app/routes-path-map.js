@@ -7,4 +7,7 @@ export const routePathMap = {
     passwordReset: {
         path: '/password-reset',
     },
+    passwordResetSuccess: {
+        path: '/password-reset-success',
+    },
 };
