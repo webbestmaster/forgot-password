@@ -7,7 +7,7 @@ import React from 'react';
 import {CSSTransition} from 'react-transition-group';
 import {Link, Redirect, Route} from 'react-router-dom';
 
-import type {MatchType} from '../../type/react-router-dom-v5-type-extract';
+import type {MatchType, RouterHistoryType} from '../../type/react-router-dom-v5-type-extract';
 import {PageWrapper} from '../page-wrapper/c-page-wrapper';
 import pageWrapperStyle from '../page-wrapper/page-wrapper.style.scss';
 import type {LocaleContextType} from '../locale/c-locale-context';
@@ -54,8 +54,8 @@ export function redderRoute(routeItem: RouteItemType | RedirectItemType): Node {
 
     return (
         <Route exact key={path} path={path}>
-            {(contextRouterData: {match: MatchType | null}): Node => {
-                const {match} = contextRouterData;
+            {(contextRouterData: {match: MatchType | null, history: RouterHistoryType}): Node => {
+                const {match, history} = contextRouterData;
 
                 return (
                     <CSSTransition
@@ -69,7 +69,7 @@ export function redderRoute(routeItem: RouteItemType | RedirectItemType): Node {
                             {(localeContext: LocaleContextType): Node => {
                                 return (
                                     <PageWrapper>
-                                        <PageComponent localeContext={localeContext}/>
+                                        <PageComponent history={history} localeContext={localeContext}/>
                                     </PageWrapper>
                                 );
                             }}

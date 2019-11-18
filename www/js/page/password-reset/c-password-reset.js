@@ -7,6 +7,8 @@ import type {LocaleContextType} from '../../component/locale/c-locale-context';
 import {InputText} from '../../component/layout/input/input-text/c-input-text';
 import {inputTextTypeMap} from '../../component/layout/input/input-text/input-text-const';
 import {isError} from '../../lib/is';
+import type {RouterHistoryType} from '../../type/react-router-dom-v5-type-extract';
+import {routePathMap} from '../../component/app/routes-path-map';
 
 import type {FormValidationType, ValidationPropertyType} from './type-password-reset';
 import {getIsValidationItemValid} from './helper-password-reset';
@@ -15,6 +17,7 @@ import {ValidationHint} from './validation-hint/c-validation-hint';
 import {resetPassword} from './password-reset-helper';
 
 type PropsType = {
+    +history: RouterHistoryType,
     +localeContext: LocaleContextType,
 };
 type StateType = {|
@@ -83,16 +86,16 @@ export class PasswordReset extends Component<PropsType, StateType> {
     handleFormSubmit = async (evt: SyntheticEvent<HTMLFormElement>) => {
         evt.preventDefault();
 
-        const {state} = this;
+        const {state, props} = this;
         const {resetPasswordForm, isInProgress} = state;
-        const {password, passwordConfirm} = resetPasswordForm;
+        const {password} = resetPasswordForm;
 
         if (isInProgress) {
             console.error('Form is in progress');
             return;
         }
 
-        if (this.getIsFormValid() === false && 0) {
+        if (this.getIsFormValid() === false) {
             console.error('Form is not valid');
             return;
         }
@@ -101,11 +104,14 @@ export class PasswordReset extends Component<PropsType, StateType> {
 
         const resetPasswordResult = await resetPassword(password);
 
+        this.setState({isInProgress: false});
+
         if (isError(resetPasswordResult)) {
             console.error('-->', resetPasswordResult);
+            return;
         }
 
-        this.setState({isInProgress: false});
+        props.history.push(routePathMap.passwordResetSuccess.path);
     };
 
     handleChangePassword = (password: string) => {
