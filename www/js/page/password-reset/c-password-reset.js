@@ -5,18 +5,20 @@ import classNames from 'classnames';
 
 import type {LocaleContextType} from '../../component/locale/c-locale-context';
 import {InputText} from '../../component/layout/input/input-text/c-input-text';
-
 import {inputTextTypeMap} from '../../component/layout/input/input-text/input-text-const';
+import {isError} from '../../lib/is';
 
-import type {FormValidationType, ValidationPropertyType, ValidationItemType} from './type-password-reset';
+import type {FormValidationType, ValidationPropertyType} from './type-password-reset';
 import {getIsValidationItemValid} from './helper-password-reset';
 import passwordResetStyle from './password-reset.style.scss';
 import {ValidationHint} from './validation-hint/c-validation-hint';
+import {resetPassword} from './password-reset-helper';
 
 type PropsType = {
     +localeContext: LocaleContextType,
 };
 type StateType = {|
+    +isInProgress: boolean,
     +resetPasswordForm: {|
         +password: string,
         +passwordConfirm: string,
@@ -28,6 +30,7 @@ export class PasswordReset extends Component<PropsType, StateType> {
         super(props);
 
         this.state = {
+            isInProgress: false,
             resetPasswordForm: {
                 password: '',
                 passwordConfirm: '',
@@ -77,19 +80,32 @@ export class PasswordReset extends Component<PropsType, StateType> {
         return isPasswordValid && isPasswordConfirmValid;
     }
 
-    handleFormSubmit = (evt: SyntheticEvent<HTMLFormElement>) => {
+    handleFormSubmit = async (evt: SyntheticEvent<HTMLFormElement>) => {
         evt.preventDefault();
 
-        if (this.getIsFormValid() === false) {
+        const {state} = this;
+        const {resetPasswordForm, isInProgress} = state;
+        const {password, passwordConfirm} = resetPasswordForm;
+
+        if (isInProgress) {
+            console.error('Form is in progress');
+            return;
+        }
+
+        if (this.getIsFormValid() === false && 0) {
             console.error('Form is not valid');
             return;
         }
 
-        const {state} = this;
-        const {resetPasswordForm} = state;
-        const {password, passwordConfirm} = resetPasswordForm;
+        this.setState({isInProgress: true});
 
-        alert(password + ' - ' + passwordConfirm);
+        const resetPasswordResult = await resetPassword(password);
+
+        if (isError(resetPasswordResult)) {
+            console.error('-->', resetPasswordResult);
+        }
+
+        this.setState({isInProgress: false});
     };
 
     handleChangePassword = (password: string) => {
@@ -107,6 +123,8 @@ export class PasswordReset extends Component<PropsType, StateType> {
     };
 
     render(): Node {
+        const {state} = this;
+        const {isInProgress} = state;
         const formValidation = this.validateForm();
         const isPasswordValid = getIsValidationItemValid(formValidation.password);
         const isPasswordConfirmValid = getIsValidationItemValid(formValidation.passwordConfirm);
@@ -133,6 +151,7 @@ export class PasswordReset extends Component<PropsType, StateType> {
 
                 <button
                     className={classNames(passwordResetStyle.password_reset__form__button, {
+                        [passwordResetStyle.password_reset__form__button__is_in_progress]: isInProgress,
                         [passwordResetStyle.password_reset__form__button__active]: this.getIsFormValid(),
                     })}
                     type="submit"

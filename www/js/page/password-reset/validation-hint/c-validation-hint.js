@@ -1,6 +1,6 @@
 // @flow
 
-import React, {Component, type Node} from 'react';
+import React, {type Node} from 'react';
 
 import type {ValidationItemType, ValidationPropertyType} from '../type-password-reset';
 

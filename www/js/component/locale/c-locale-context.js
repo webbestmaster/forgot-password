@@ -6,9 +6,9 @@ import type {Node} from 'react';
 import React, {Component} from 'react';
 
 import type {LocaleNameType} from './const';
+import type {ValueMapType} from './locale-helper';
 import {getLocaleName, getLocalizedString, setLocaleName} from './locale-helper';
 import type {LangKeyType} from './translation/type';
-import type {ValueMapType} from './locale-helper';
 
 export type LocaleContextType = {|
     +name: LocaleNameType,
