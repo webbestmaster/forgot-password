@@ -1,0 +1,51 @@
+.input_text__label {
+    display: block;
+    height: 46px;
+    margin-bottom: 11px;
+    position: relative;
+}
+
+%input-text--input,
+.input_text__input {
+    border-bottom: 1px solid #a6b0d5;
+    box-sizing: border-box;
+    display: block;
+    height: 100%;
+    width: 100%;
+
+    &:focus {
+        border-bottom-color: #6687fe;
+    }
+
+    &.input_text__input__invalid {
+        border-bottom-color: #ff2e55;
+    }
+}
+
+.input_text__input__password {
+    @extend %input-text--input;
+
+    padding-left: 30px;
+    padding-right: 40px;
+}
+
+.input_text__password__key {
+    left: 0;
+    position: absolute;
+    top: 17px;
+    z-index: 1;
+}
+
+.input_text__show_password__button {
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40px;
+    z-index: 1;
+}
+
+.input_text__show_password__image {
+    display: block;
+    float: right;
+}

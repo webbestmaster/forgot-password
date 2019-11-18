@@ -1,0 +1,28 @@
+.validation_hint__wrapper {
+    display: block;
+    padding-bottom: 19px;
+}
+
+.validation_hint__item {
+    background-position: 0 3px;
+    background-repeat: no-repeat;
+    background-size: 12px 10px;
+    font-size: 13px;
+    padding-bottom: 4px;
+    padding-left: 22px;
+
+    &.validation_hint__item__inactive {
+        background-image: url('./image/item-inactive.png');
+        color: #53608d;
+    }
+
+    &.validation_hint__item__valid {
+        background-image: url('./image/item-valid.png');
+        color: #2eab8e;
+    }
+
+    &.validation_hint__item__invalid {
+        background-image: url('./image/item-invalid.png');
+        color: #ff2e55;
+    }
+}

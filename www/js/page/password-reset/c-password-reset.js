@@ -5,8 +5,12 @@ import React, {Component, type Node} from 'react';
 import type {LocaleContextType} from '../../component/locale/c-locale-context';
 import {InputText} from '../../component/layout/input/input-text/c-input-text';
 
+import {inputTextTypeMap} from '../../component/layout/input/input-text/input-text-const';
+
 import type {FormValidationType, ValidationPropertyType, ValidationItemType} from './type-password-reset';
 import {getIsValidationItemValid} from './helper-password-reset';
+import passwordResetStyle from './password-reset.style.scss';
+import {ValidationHint} from './validation-hint/c-validation-hint';
 
 type PropsType = {
     +localeContext: LocaleContextType,
@@ -48,7 +52,11 @@ export class PasswordReset extends Component<PropsType, StateType> {
             validationList: [
                 {
                     text: 'Password and confirm password should be the same',
-                    isValid: password === passwordConfirm,
+                    isValid: password === passwordConfirm && passwordConfirm.length > 0,
+                },
+                {
+                    text: 'Confirm password is required',
+                    isValid: passwordConfirm.length > 0,
                 },
             ],
             value: passwordConfirm,
@@ -97,43 +105,31 @@ export class PasswordReset extends Component<PropsType, StateType> {
         this.setState({resetPasswordForm: {...resetPasswordForm, passwordConfirm}});
     };
 
-    renderValidation(validation: ValidationPropertyType): Node {
-        return (
-            <div>
-                {validation.validationList.map((validationItem: ValidationItemType): Node => {
-                    return (
-                        <p key={validationItem.text}>
-                            {validationItem.text} {Number(validationItem.isValid)}
-                        </p>
-                    );
-                })}
-            </div>
-        );
-    }
-
     render(): Node {
-        const {props} = this;
-        const {localeContext} = props;
         const formValidation = this.validateForm();
         const isPasswordValid = getIsValidationItemValid(formValidation.password);
         const isPasswordConfirmValid = getIsValidationItemValid(formValidation.passwordConfirm);
 
         return (
-            <form action="#" onSubmit={this.handleFormSubmit}>
+            <form action="#" className={passwordResetStyle.password_reset__form} onSubmit={this.handleFormSubmit}>
+                <h1 className={passwordResetStyle.password_reset__form__header}>Please enter your new password:</h1>
+
                 <InputText
-                    isValid={isPasswordValid && Boolean(formValidation.password.value)}
+                    isValid={isPasswordValid || !formValidation.password.value}
                     onInput={this.handleChangePassword}
-                    placeholder={localeContext.getLocalizedString('LOGIN_POPUP__BUTTON_LOGIN')}
-                    type="password"
+                    placeholder="Password"
+                    type={inputTextTypeMap.password}
                 />
-                {this.renderValidation(formValidation.password)}
+                <ValidationHint validation={formValidation.password}/>
+
                 <InputText
-                    isValid={isPasswordConfirmValid && Boolean(formValidation.passwordConfirm.value)}
+                    isValid={isPasswordConfirmValid || !formValidation.passwordConfirm.value}
                     onInput={this.handleChangePasswordConfirm}
-                    placeholder={localeContext.getLocalizedString('LOGIN_POPUP__LINK_LOST_PASSWORD')}
-                    type="password"
+                    placeholder="Confirm password"
+                    type={inputTextTypeMap.password}
                 />
-                {this.renderValidation(formValidation.passwordConfirm)}
+                <ValidationHint validation={formValidation.passwordConfirm}/>
+
                 <button type="submit">submit {Number(this.getIsFormValid())}</button>
             </form>
         );
