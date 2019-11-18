@@ -5,16 +5,8 @@ import React, {Component, type Node} from 'react';
 import type {LocaleContextType} from '../../component/locale/c-locale-context';
 import {InputText} from '../../component/layout/input/input-text/c-input-text';
 
-type ValidationItemType = {|
-    +passedList: Array<string>,
-    +failedList: Array<string>,
-    +value: string,
-|};
-
-type FormValidationType = {|
-    +password: ValidationItemType,
-    +passwordConfirm: ValidationItemType,
-|};
+import type {FormValidationType, ValidationPropertyType, ValidationItemType} from './type-password-reset';
+import {getIsValidationItemValid} from './helper-password-reset';
 
 type PropsType = {
     +localeContext: LocaleContextType,
@@ -43,41 +35,24 @@ export class PasswordReset extends Component<PropsType, StateType> {
         const {resetPasswordForm} = state;
         const {password, passwordConfirm} = resetPasswordForm;
 
-        const passwordValidation: ValidationItemType = {
-            passedList: [],
-            failedList: [],
+        const passwordValidation: ValidationPropertyType = {
+            validationList: [
+                {text: 'At least 1 letter', isValid: /[A-Za-z]/.test(password)},
+                {text: 'At least 1 number', isValid: /\d/.test(password)},
+                {text: '8 symbols minimum', isValid: password.length >= 8},
+            ],
             value: password,
         };
 
-        if (/\w/.test(password)) {
-            passwordValidation.passedList.push('At least 1 letter');
-        } else {
-            passwordValidation.failedList.push('At least 1 letter');
-        }
-
-        if (/\d/.test(password)) {
-            passwordValidation.passedList.push('At least 1 number');
-        } else {
-            passwordValidation.failedList.push('At least 1 number');
-        }
-
-        if (password.length >= 8) {
-            passwordValidation.passedList.push('8 symbols minimum');
-        } else {
-            passwordValidation.failedList.push('8 symbols minimum');
-        }
-
-        const passwordConfirmValidation: ValidationItemType = {
-            passedList: [],
-            failedList: [],
+        const passwordConfirmValidation: ValidationPropertyType = {
+            validationList: [
+                {
+                    text: 'Password and confirm password should be the same',
+                    isValid: password === passwordConfirm,
+                },
+            ],
             value: passwordConfirm,
         };
-
-        if (password === passwordConfirm) {
-            passwordConfirmValidation.passedList.push('Password and confirm password should be the same');
-        } else {
-            passwordConfirmValidation.failedList.push('Password and confirm password should be the same');
-        }
 
         return {
             password: passwordValidation,
@@ -87,8 +62,8 @@ export class PasswordReset extends Component<PropsType, StateType> {
 
     getIsFormValid(): boolean {
         const formValidation = this.validateForm();
-        const isPasswordValid = formValidation.password.failedList.length === 0;
-        const isPasswordConfirmValid = formValidation.passwordConfirm.failedList.length === 0;
+        const isPasswordValid = getIsValidationItemValid(formValidation.password);
+        const isPasswordConfirmValid = getIsValidationItemValid(formValidation.passwordConfirm);
 
         return isPasswordValid && isPasswordConfirmValid;
     }
@@ -122,12 +97,26 @@ export class PasswordReset extends Component<PropsType, StateType> {
         this.setState({resetPasswordForm: {...resetPasswordForm, passwordConfirm}});
     };
 
+    renderValidation(validation: ValidationPropertyType): Node {
+        return (
+            <div>
+                {validation.validationList.map((validationItem: ValidationItemType): Node => {
+                    return (
+                        <p key={validationItem.text}>
+                            {validationItem.text} {Number(validationItem.isValid)}
+                        </p>
+                    );
+                })}
+            </div>
+        );
+    }
+
     render(): Node {
         const {props} = this;
         const {localeContext} = props;
         const formValidation = this.validateForm();
-        const isPasswordValid = formValidation.password.failedList.length === 0;
-        const isPasswordConfirmValid = formValidation.passwordConfirm.failedList.length === 0;
+        const isPasswordValid = getIsValidationItemValid(formValidation.password);
+        const isPasswordConfirmValid = getIsValidationItemValid(formValidation.passwordConfirm);
 
         return (
             <form action="#" onSubmit={this.handleFormSubmit}>
@@ -137,14 +126,14 @@ export class PasswordReset extends Component<PropsType, StateType> {
                     placeholder={localeContext.getLocalizedString('LOGIN_POPUP__BUTTON_LOGIN')}
                     type="password"
                 />
-                <br/>
+                {this.renderValidation(formValidation.password)}
                 <InputText
                     isValid={isPasswordConfirmValid && Boolean(formValidation.passwordConfirm.value)}
                     onInput={this.handleChangePasswordConfirm}
                     placeholder={localeContext.getLocalizedString('LOGIN_POPUP__LINK_LOST_PASSWORD')}
                     type="password"
                 />
-                <br/>
+                {this.renderValidation(formValidation.passwordConfirm)}
                 <button type="submit">submit {Number(this.getIsFormValid())}</button>
             </form>
         );
