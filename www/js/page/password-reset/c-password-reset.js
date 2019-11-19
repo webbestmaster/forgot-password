@@ -9,6 +9,7 @@ import {inputTextTypeMap} from '../../component/layout/input/input-text/input-te
 import {isError} from '../../lib/is';
 import type {RouterHistoryType} from '../../type/react-router-dom-v5-type-extract';
 import {routePathMap} from '../../component/app/routes-path-map';
+import {Locale} from '../../component/locale/c-locale';
 
 import type {FormValidationType, ValidationPropertyType} from './type-password-reset';
 import {getIsValidationItemValid} from './helper-password-reset';
@@ -42,15 +43,25 @@ export class PasswordReset extends Component<PropsType, StateType> {
     }
 
     validateForm(): FormValidationType {
-        const {state} = this;
+        const {state, props} = this;
+        const {localeContext} = props;
         const {resetPasswordForm} = state;
         const {password, passwordConfirm} = resetPasswordForm;
 
         const passwordValidation: ValidationPropertyType = {
             validationList: [
-                {text: 'At least 1 letter', isValid: /[A-Za-z]/.test(password)},
-                {text: 'At least 1 number', isValid: /\d/.test(password)},
-                {text: '8 symbols minimum', isValid: password.length >= 8},
+                {
+                    text: localeContext.getLocalizedString('RESET_PASSWORD__AT_LEAST_1_LETTER'),
+                    isValid: /[A-Za-z]/.test(password),
+                },
+                {
+                    text: localeContext.getLocalizedString('RESET_PASSWORD__AT_LEAST_1_NUMBER'),
+                    isValid: /\d/.test(password),
+                },
+                {
+                    text: localeContext.getLocalizedString('RESET_PASSWORD__8_SYMBOLS_MINIMUM'),
+                    isValid: password.length >= 8,
+                },
             ],
             value: password,
         };
@@ -58,11 +69,13 @@ export class PasswordReset extends Component<PropsType, StateType> {
         const passwordConfirmValidation: ValidationPropertyType = {
             validationList: [
                 {
-                    text: 'Password and confirm password should be the same',
+                    text: localeContext.getLocalizedString(
+                        'RESET_PASSWORD__PASSWORD_AND_CONFIRM_PASSWORD_SHOULD_BE_THE_SAME'
+                    ),
                     isValid: password === passwordConfirm && passwordConfirm.length > 0,
                 },
                 {
-                    text: 'Confirm password is required',
+                    text: localeContext.getLocalizedString('RESET_PASSWORD__CONFIRM_PASSWORD_IS_REQUIRED'),
                     isValid: passwordConfirm.length > 0,
                 },
             ],
@@ -129,7 +142,8 @@ export class PasswordReset extends Component<PropsType, StateType> {
     };
 
     render(): Node {
-        const {state} = this;
+        const {state, props} = this;
+        const {localeContext} = props;
         const {isInProgress} = state;
         const formValidation = this.validateForm();
         const isPasswordValid = getIsValidationItemValid(formValidation.password);
@@ -137,12 +151,14 @@ export class PasswordReset extends Component<PropsType, StateType> {
 
         return (
             <form action="#" className={passwordResetStyle.password_reset__form} onSubmit={this.handleFormSubmit}>
-                <h1 className={passwordResetStyle.password_reset__form__header}>Please enter your new password:</h1>
+                <h1 className={passwordResetStyle.password_reset__form__header}>
+                    <Locale stringKey="RESET_PASSWORD__PLEASE_ENTER_YOUR_NEW_PASSWORD"/>
+                </h1>
 
                 <InputText
                     isValid={isPasswordValid || !formValidation.password.value}
                     onInput={this.handleChangePassword}
-                    placeholder="Password"
+                    placeholder={localeContext.getLocalizedString('RESET_PASSWORD__PASSWORD')}
                     type={inputTextTypeMap.password}
                 />
                 <ValidationHint validation={formValidation.password}/>
@@ -150,7 +166,7 @@ export class PasswordReset extends Component<PropsType, StateType> {
                 <InputText
                     isValid={isPasswordConfirmValid || !formValidation.passwordConfirm.value}
                     onInput={this.handleChangePasswordConfirm}
-                    placeholder="Confirm password"
+                    placeholder={localeContext.getLocalizedString('RESET_PASSWORD__CONFIRM_PASSWORD')}
                     type={inputTextTypeMap.password}
                 />
                 <ValidationHint validation={formValidation.passwordConfirm}/>
@@ -162,7 +178,7 @@ export class PasswordReset extends Component<PropsType, StateType> {
                     })}
                     type="submit"
                 >
-                    Set Password
+                    <Locale stringKey="RESET_PASSWORD__SET_PASSWORD"/>
                 </button>
             </form>
         );

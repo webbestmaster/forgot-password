@@ -6,14 +6,22 @@ export const zhCn: LangDataType = {
     /* eslint-disable id-match, id-length */
     META__LANGUAGE_NAME: '简体中文',
 
-    LOGIN_POPUP__PLEASE_LOG_IN_OR_JOIN_NOW: '请登录或立即注册。',
-    LOGIN_POPUP__INPUT_USERNAME: '用户名',
-    LOGIN_POPUP__INPUT_PASSWORD: '密码',
-    LOGIN_POPUP__BUTTON_LOGIN: '登录',
-    LOGIN_POPUP__BUTTON_JOIN_NOW: '立即注册',
-    LOGIN_POPUP__LINK_LOST_PASSWORD: '丢失密码？',
+    RESET_PASSWORD__PLEASE_ENTER_YOUR_NEW_PASSWORD: '[ZH-CN] Please enter your new password:',
+    RESET_PASSWORD__PASSWORD: '[ZH-CN] Password',
+    RESET_PASSWORD__CONFIRM_PASSWORD: '[ZH-CN] Confirm password',
+    RESET_PASSWORD__SET_PASSWORD: '[ZH-CN] Set Password',
+    RESET_PASSWORD__AT_LEAST_1_LETTER: '[ZH-CN] At least 1 letter',
+    RESET_PASSWORD__AT_LEAST_1_NUMBER: '[ZH-CN] At least 1 number',
+    RESET_PASSWORD__8_SYMBOLS_MINIMUM: '[ZH-CN] 8 symbols minimum',
+    RESET_PASSWORD__PASSWORD_AND_CONFIRM_PASSWORD_SHOULD_BE_THE_SAME:
+        '[ZH-CN] Password and confirm password should be the same',
+    RESET_PASSWORD__CONFIRM_PASSWORD_IS_REQUIRED: '[ZH-CN] Confirm password is required',
 
-    // spec symbols
-    SPACE: ' ',
+    RESET_PASSWORD_SUCCESS__SUCCESS: '[ZH-CN] Success!',
+    RESET_PASSWORD_SUCCESS__PASSWORD_WAS_SUCCESSFULLY_CHANGED: '[ZH-CN] Password was successfully changed.',
+    RESET_PASSWORD_SUCCESS__PLEASE_SING_IN_WITH_WITH_THE_NEW_PASSWORD:
+        '[ZH-CN] Please, sing in with with the new password.',
+    RESET_PASSWORD_SUCCESS__SIGN_IN: '[ZH-CN] Sign In',
+
     /* eslint-enable id-match, id-length */
 };

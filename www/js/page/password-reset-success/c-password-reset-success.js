@@ -6,14 +6,12 @@ import React, {Component, type Node} from 'react';
 import classNames from 'classnames';
 
 import passwordResetStyle from '../password-reset/password-reset.style.scss';
-import type {LocaleContextType} from '../../component/locale/c-locale-context';
+import {Locale} from '../../component/locale/c-locale';
 
 import passwordResetSuccessStyle from './password-reset-success.style.scss';
 import passwordResetSuccessImage from './image/password-reset-success.png';
 
-type PropsType = {
-    +localeContext: LocaleContextType,
-};
+type PropsType = {};
 
 export function PasswordResetSuccess(props: PropsType): Node {
     return (
@@ -23,11 +21,13 @@ export function PasswordResetSuccess(props: PropsType): Node {
                 className={passwordResetSuccessStyle.password_reset_success__image}
                 src={passwordResetSuccessImage}
             />
-            <h1 className={passwordResetSuccessStyle.password_reset_success__title}>Success!</h1>
+            <h1 className={passwordResetSuccessStyle.password_reset_success__title}>
+                <Locale stringKey="RESET_PASSWORD_SUCCESS__SUCCESS"/>
+            </h1>
             <p className={passwordResetSuccessStyle.password_reset_success__text}>
-                Password was successfully changed.
+                <Locale stringKey="RESET_PASSWORD_SUCCESS__PASSWORD_WAS_SUCCESSFULLY_CHANGED"/>
                 <br/>
-                Please, sing in with with the new password.
+                <Locale stringKey="RESET_PASSWORD_SUCCESS__PLEASE_SING_IN_WITH_WITH_THE_NEW_PASSWORD"/>
             </p>
             <a
                 className={classNames(
@@ -36,7 +36,7 @@ export function PasswordResetSuccess(props: PropsType): Node {
                 )}
                 href="/"
             >
-                Sign In
+                <Locale stringKey="RESET_PASSWORD_SUCCESS__SIGN_IN"/>
             </a>
         </div>
     );

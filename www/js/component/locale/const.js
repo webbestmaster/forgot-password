@@ -21,8 +21,7 @@ export const allLocalesData = {
     'zh-TW': zhTw,
 };
 
-// export const localeNameList: Array<LocaleNameType> = Object.keys(allLocalesData);
-export const localeNameList: Array<LocaleNameType> = ['en-US'];
+export const localeNameList: Array<LocaleNameType> = Object.keys(allLocalesData);
 
 export const localeConst = {
     defaults: {
